@@ -29,7 +29,6 @@ public class Rpg {
     public static void exibirDadosJogador(Player jogador) {
         System.out.println("Nome: " + jogador.getName());
         System.out.println("Nível: " + jogador.getLevel());
-        System.out.println("HP: " + jogador.getHp());
         System.out.println("Itens no inventário:");
         jogador.getInventory().listItems();
         System.out.println("Peso total: " + jogador.getInventory().getTotalWeight() + "kg");
