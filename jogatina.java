@@ -66,7 +66,6 @@ public class jogatina extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -85,13 +84,13 @@ public class jogatina extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Item", "Quantidade"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -107,7 +106,7 @@ public class jogatina extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton1);
-        jButton1.setBounds(480, 180, 130, 40);
+        jButton1.setBounds(430, 180, 130, 40);
 
         jButton2.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         jButton2.setText("Inserir Item");
@@ -117,17 +116,17 @@ public class jogatina extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton2);
-        jButton2.setBounds(10, 180, 130, 40);
+        jButton2.setBounds(50, 180, 130, 40);
 
         jButton3.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         jButton3.setText("Deletar Item");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton3);
-        jButton3.setBounds(170, 180, 130, 40);
-
-        jButton4.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
-        jButton4.setText("Salvar Jogo");
-        jPanel1.add(jButton4);
-        jButton4.setBounds(320, 180, 130, 40);
+        jButton3.setBounds(240, 180, 130, 40);
 
         jLabel2.setFont(new java.awt.Font("Tempus Sans ITC", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -212,6 +211,52 @@ public class jogatina extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+            int selectedRow = jTable1.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Selecione um item para deletar.");
+        return;
+    }
+
+    // Obtém o nome do item da linha selecionada
+    String nomeItem = jTable1.getValueAt(selectedRow, 0).toString();
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+        "Deseja realmente deletar o item \"" + nomeItem + "\"?",
+        "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/rpg", "root", "");
+
+        // Deleta o item com base no nome e personagemId
+        String sql = "DELETE FROM inventario WHERE nome_item = ? AND personagem_id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, nomeItem);
+        ps.setInt(2, personagemId);
+        int rowsDeleted = ps.executeUpdate();
+
+        ps.close();
+        conn.close();
+
+        if (rowsDeleted > 0) {
+            JOptionPane.showMessageDialog(this, "Item deletado com sucesso!");
+            carregarInventario(); // Atualiza a tabela
+        } else {
+            JOptionPane.showMessageDialog(this, "Item não encontrado ou já deletado.");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erro ao deletar item: " + e.getMessage());
+    }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -251,7 +296,6 @@ public class jogatina extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

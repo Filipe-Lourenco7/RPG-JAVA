@@ -4,42 +4,31 @@ import java.io.Serializable;
 
 public class Item implements Serializable {
     private String name;
-    private double weight;
-    private int quantity;
+    private int quantidade;
 
-    public Item(String name, double weight, int quantity) {
+    public Item(String name, double weight, int quantidade) {
         this.name = name;
-        this.weight = weight;
-        this.quantity = quantity;
+        this.quantidade = quantidade;
     }
 
     public String getName() {
         return name;
     }
 
-    public double getWeight() {
-        return weight;
-    }
-
     public int getQuantity() {
-        return quantity;
+        return quantidade;
     }
-
-    public double getTotalWeight() {
-        return weight * quantity;
-    }
-
     public void addQuantity(int amount) {
-        this.quantity += amount;
+        this.quantidade += amount;
     }
 
     public void removeQuantity(int amount) {
-        this.quantity -= amount;
-        if (this.quantity < 0) this.quantity = 0;
+        this.quantidade -= amount;
+        if (this.quantidade < 0) this.quantidade = 0;
     }
 
     @Override
     public String toString() {
-        return name + " (x" + quantity + ", " + weight + "kg cada)";
+        return name + " (x" + quantidade;
     }
 }
